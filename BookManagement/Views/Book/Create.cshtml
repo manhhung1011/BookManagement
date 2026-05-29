@@ -1,0 +1,22 @@
+﻿@model BookManagement.Models.Book
+
+<h2>Thêm sách mới</h2>
+
+<form asp-action="Create" method="post">
+    <label>Tên sách:</label>
+    <input asp-for="Name" />
+    <span asp-validation-for="Name" class="text-danger"></span>
+
+    <label>Giá:</label>
+    <input asp-for="Price" />
+    <span asp-validation-for="Price" class="text-danger"></span>
+
+    <button type="submit">Lưu</button>
+</form>
+
+@await Html.PartialAsync("_ValidationScriptsPartial")
+
+@if (TempData["Message"] != null)
+{
+    <p>@TempData["Message"]</p>
+}

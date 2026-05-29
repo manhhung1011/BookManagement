@@ -1,0 +1,28 @@
+﻿@model List<BookManagement.Models.Book>
+
+<h2>Danh sách sách</h2>
+<a asp-action="Create">Thêm sách mới</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Tên sách</th>
+            <th>Giá</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var book in Model)
+        {
+            <tr>
+                <td>@book.Id</td>
+                <td>@book.Name</td>
+                <td>@book.Price</td>
+                <td>
+                    <a asp-action="Detail" asp-route-id="@book.Id">Chi tiết</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
