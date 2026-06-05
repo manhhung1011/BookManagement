@@ -1,6 +1,14 @@
 ﻿@model List<BookManagement.Models.Book>
 
 <h2>Danh sách sách</h2>
+@if (TempData["Message"] != null)
+{
+    <p class="text-success">@TempData["Message"]</p>
+}
+else if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+    <p class="text-success">@ViewBag.Message</p>
+}
 <a asp-action="Create">Thêm sách mới</a>
 
 <table>

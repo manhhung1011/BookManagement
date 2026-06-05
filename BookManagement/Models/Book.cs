@@ -12,7 +12,8 @@ namespace BookManagement.Models
         [Range(0.01, double.MaxValue, ErrorMessage = "Giá phải lớn hơn 0")]
         public decimal Price { get; set; }
 
-        public string Author { get; set; }
-        public string Description { get; set; }
+        // Make these nullable so they're optional when creating a book
+        public string? Author { get; set; }
+        public string? Description { get; set; }
     }
 }
