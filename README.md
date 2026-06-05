@@ -76,6 +76,144 @@ Nếu người dùng chọn “Chi tiết” → hệ thống gửi `id` sách �
 
 Nếu người dùng chọn “Thêm sách mới” → hiển thị form nhập → người dùng nhập tên và giá → controller kiểm tra validation → nếu hợp lệ thì thêm sách vào danh sách và quay lại trang danh sách.
 
+# Middleware trong ASP.NET Core MVC
+
+## Giới thiệu
+
+Trong bài thực hành này, project **BookManagement** được mở rộng bằng cách sử dụng **Middleware** trong ASP.NET Core MVC để:
+
+* Ghi log request.
+* Ghi status code sau khi xử lý request.
+* Chặn truy cập URL không hợp lệ.
+* Hiểu cách hoạt động của middleware pipeline.
+
+---
+
+# Chức năng đã thực hiện
+
+## 1. Ghi log request
+
+Middleware sẽ ghi ra Console thông tin request mỗi khi người dùng truy cập website.
+
+Ví dụ:
+
+```text
+[2026-06-05 10:30:15] Method: GET - Path: /Book
+[2026-06-05 10:31:02] Method: GET - Path: /Book/Detail/1
+```
+
+---
+
+## 2. Ghi status code
+
+Sau khi request được xử lý, middleware tiếp tục ghi status code trả về.
+
+Ví dụ:
+
+```text
+Status Code: 200
+Status Code: 400
+```
+
+---
+
+## 3. Chặn URL không hợp lệ
+
+Nếu người dùng truy cập:
+
+```text
+/Book/Detail/0
+```
+
+hoặc:
+
+```text
+/Book/Detail/-1
+```
+
+middleware sẽ:
+
+* Không cho request đi vào Controller.
+* Trả về:
+
+```text
+Book id khong hop le
+```
+
+* Status code:
+
+```text
+400
+```
+
+---
+
+# Cách hoạt động của Middleware
+
+Middleware hoạt động theo cơ chế pipeline.
+
+Khi request gửi đến:
+
+1. Middleware nhận request.
+2. Middleware kiểm tra URL.
+3. Nếu URL hợp lệ → chuyển tiếp vào Controller bằng:
+
+```csharp
+await _next(context);
+```
+
+4. Sau khi Controller xử lý xong → middleware ghi status code.
+5. Nếu URL không hợp lệ → middleware trả về response và dùng `return;` để dừng request.
+
+---
+
+# Giải thích các câu hỏi
+
+## Middleware trong ASP.NET Core dùng để làm gì?
+
+Middleware dùng để xử lý request trước khi request đi vào Controller và xử lý response trước khi trả về cho người dùng. Ví dụ: ghi log, kiểm tra quyền truy cập, xử lý lỗi, redirect HTTPS, static files.
+
+---
+
+## Middleware khác Controller ở điểm nào?
+
+Middleware xử lý request ở mức tổng quát trong pipeline, có thể chạy trước nhiều Controller. Controller chỉ xử lý logic cụ thể của từng chức năng, ví dụ xem sách, thêm sách, sửa sách.
+
+---
+
+## Dòng lệnh `await _next(context);` có ý nghĩa gì?
+
+Dòng lệnh này cho phép request tiếp tục đi đến middleware tiếp theo hoặc đi vào Controller. Sau khi Controller xử lý xong, chương trình quay lại middleware để có thể ghi thêm thông tin như status code.
+
+---
+
+## Vì sao khi middleware trả về `return;` thì request không đi tiếp vào Controller?
+
+Vì `return;` kết thúc hàm `InvokeAsync`, nên middleware dừng xử lý tại đó. Do không gọi `await _next(context);`, request sẽ không được chuyển tiếp vào Controller.
+
+---
+
+## Nếu đặt middleware sau `app.MapControllerRoute(...)` thì có thể xảy ra vấn đề gì?
+
+Middleware có thể không chạy đúng hoặc không chặn được request trước khi vào Controller. Vì vậy middleware cần đặt trước `app.MapControllerRoute(...)` để xử lý request trước.
+
+---
+
+## Nếu cần sử dụng thêm middleware khác thì viết tiếp thế nào?
+
+Có thể đăng ký thêm middleware trong `Program.cs`:
+
+```csharp
+app.UseMiddleware<RequestLoggingMiddleware>();
+app.UseMiddleware<AnotherMiddleware>();
+```
+
+Các middleware sẽ chạy theo đúng thứ tự được khai báo.
+
+---
+
+
+
 
 
 
