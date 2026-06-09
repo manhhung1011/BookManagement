@@ -17,6 +17,7 @@ else if (!string.IsNullOrEmpty(ViewBag.Message))
             <th>Id</th>
             <th>Tên sách</th>
             <th>Giá</th>
+            <th>Tác giả</th>
             <th></th>
         </tr>
     </thead>
@@ -27,8 +28,11 @@ else if (!string.IsNullOrEmpty(ViewBag.Message))
                 <td>@book.Id</td>
                 <td>@book.Name</td>
                 <td>@book.Price</td>
+                <td>@book.Author</td>
                 <td>
-                    <a asp-action="Detail" asp-route-id="@book.Id">Chi tiết</a>
+                    <a asp-action="Detail" asp-route-id="@book.Id">Chi tiết</a> |
+                    <a asp-action="Edit" asp-route-id="@book.Id">Sửa</a> |
+                    <a asp-action="Delete" asp-route-id="@book.Id">Xóa</a>
                 </td>
             </tr>
         }
