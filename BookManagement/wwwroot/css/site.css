@@ -29,3 +29,17 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+/* Book list styles */
+.card-title.display-6 { color: #1b1f3b; }
+.table-responsive { margin-top: 10px; }
+.book-price { color: #0d6efd; font-weight: 600; }
+.book-actions .btn { min-width: 80px; }
+.btn-outline-info { color: #0dcaf0; border-color: #0dcaf0; }
+.btn-outline-info:hover { background-color: #0dcaf0; color: white; }
+.btn-outline-warning { color: #ffad33; border-color: #ffad33; }
+.btn-outline-warning:hover { background-color: #ffad33; color: white; }
+.btn-outline-danger { color: #dc3545; border-color: #dc3545; }
+.btn-outline-danger:hover { background-color: #dc3545; color: white; }
+
+.table-dark th { background: linear-gradient(90deg, #343a40, #495057); }

@@ -1,12 +1,16 @@
 @model BookManagement.Models.Book
 
-<h2>Xóa sách</h2>
+<div class="card mt-4 border-danger">
+    <div class="card-body">
+        <h3 class="card-title text-danger">Xóa sách</h3>
 
-<p>Bạn có chắc muốn xóa sách: <strong>@Model.Name</strong>?</p>
+        <p>Bạn có chắc muốn xóa sách: <strong>@Model.Name</strong>?</p>
 
-<form asp-action="DeleteConfirmed" method="post">
-    @Html.AntiForgeryToken()
-    <input type="hidden" asp-for="Id" />
-    <button type="submit">Xóa</button>
-    <a asp-action="Index">Hủy</a>
-</form>
+        <form asp-action="DeleteConfirmed" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">Xóa</button>
+            <a asp-action="Index" class="btn btn-secondary ms-2">Hủy</a>
+        </form>
+    </div>
+</div>
