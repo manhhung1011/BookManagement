@@ -15,5 +15,7 @@ namespace BookManagement.Models
         // Make these nullable so they're optional when creating a book
         public string? Author { get; set; }
         public string? Description { get; set; }
+        // Path to uploaded image (relative to wwwroot), optional
+        public string? ImagePath { get; set; }
     }
 }

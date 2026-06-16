@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Folder Include="Middlewares\" />
+    <Folder Include="wwwroot\images\Books\" />
   </ItemGroup>
 
 </Project>

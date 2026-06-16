@@ -39,24 +39,46 @@ namespace BookManagement.Controllers
         // POST: xử lý khi submit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Book book)
+        public IActionResult Create(Book book, IFormFile imageFile)
         {
-            _logger?.LogInformation("BookController.Create POST called. ModelState.IsValid={IsValid}", ModelState.IsValid);
-
-            if (!ModelState.IsValid)
+            if (imageFile != null && imageFile.Length > 0)
             {
-                var errors = string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
-                _logger?.LogWarning("ModelState invalid: {Errors}", errors);
-                return View(book);
+                var extension = Path.GetExtension(imageFile.FileName).ToLower();
+
+                if (extension != ".jpg" && extension != ".jpeg" && extension != ".png")
+                {
+                    ModelState.AddModelError("ImagePath", "Chỉ cho phép upload file jpg hoặc png");
+                    return View(book);
+                }
+
+                var fileName = Guid.NewGuid().ToString() + extension;
+                var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/books");
+
+                if (!Directory.Exists(uploadPath))
+                {
+                    Directory.CreateDirectory(uploadPath);
+                }
+
+                var filePath = Path.Combine(uploadPath, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    imageFile.CopyTo(stream);
+                }
+
+                book.ImagePath = "/images/books/" + fileName;
             }
 
-            _db.Books.Add(book);
-            _db.SaveChanges();
-            _logger?.LogInformation("Book added (Id={Id}). Showing success on Create page.", book.Id);
-            // Show success immediately on the same Create page (no redirect)
-            ModelState.Clear();
-            ViewBag.Message = "Thêm sách thành công!";
-            return View(new Book());
+            if (ModelState.IsValid)
+            {
+                _db.Books.Add(book);
+                _db.SaveChanges();
+
+                TempData["Message"] = "Thêm sách thành công!";
+                return RedirectToAction("Index");
+            }
+
+            return View(book);
         }
 
         // GET: Edit
@@ -69,8 +91,32 @@ namespace BookManagement.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Book book)
+        public IActionResult Edit(Book book, IFormFile? imageFile)
         {
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                var extension = Path.GetExtension(imageFile.FileName).ToLower();
+
+                if (extension != ".jpg" && extension != ".jpeg" && extension != ".png")
+                {
+                    ModelState.AddModelError("ImagePath", "Chỉ cho phép upload file jpg hoặc png");
+                    return View(book);
+                }
+
+                var fileName = Guid.NewGuid().ToString() + extension;
+                var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/books");
+
+                if (!Directory.Exists(uploadPath)) Directory.CreateDirectory(uploadPath);
+
+                var filePath = Path.Combine(uploadPath, fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    imageFile.CopyTo(stream);
+                }
+
+                book.ImagePath = "/images/books/" + fileName;
+            }
+
             if (!ModelState.IsValid) return View(book);
             _db.Books.Update(book);
             _db.SaveChanges();

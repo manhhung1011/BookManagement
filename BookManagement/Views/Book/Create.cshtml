@@ -1,44 +1,53 @@
 ﻿@model BookManagement.Models.Book
 
-<h2>Thêm sách mới</h2>
+<div class="card mt-4">
+    <div class="card-body">
+        <h3 class="card-title">Thêm sách mới</h3>
 
-@* Show success message set by controller via ViewBag.Message *@
-@if (!string.IsNullOrEmpty(ViewBag.Message as string))
-{
-    <p style="color:green; font-weight:600;">@ViewBag.Message</p>
-}
+        @if (!string.IsNullOrEmpty(ViewBag.Message as string))
+        {
+            <div class="alert alert-success">@ViewBag.Message</div>
+        }
 
-<form asp-action="Create" method="post">
-    @Html.AntiForgeryToken()
+        <form asp-action="Create" method="post" enctype="multipart/form-data" class="row g-3">
+            @Html.AntiForgeryToken()
 
-    <div class="form-group">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+            <div class="col-12">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="Price" class="form-label"></label>
+                <input asp-for="Price" type="number" step="0.01" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="Author" class="form-label"></label>
+                <input asp-for="Author" class="form-control" />
+            </div>
+
+            <div class="col-12">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Hình ảnh</label>
+                <input type="file" name="imageFile" class="form-control" accept=".jpg,.jpeg,.png" />
+                <span asp-validation-for="ImagePath" class="text-danger"></span>
+            </div>
+
+            <div class="col-12">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <button type="submit" class="btn btn-primary">Lưu</button>
+                <a asp-action="Index" class="btn btn-secondary ms-2">Hủy</a>
+            </div>
+        </form>
     </div>
-
-    <div class="form-group">
-        <label asp-for="Price"></label>
-        <input asp-for="Price" type="number" step="0.01" class="form-control" />
-        <span asp-validation-for="Price" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Author"></label>
-        <input asp-for="Author" class="form-control" />
-        <span asp-validation-for="Author" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Description"></label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-    <button type="submit" class="btn btn-primary">Lưu</button>
-</form>
+</div>
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
